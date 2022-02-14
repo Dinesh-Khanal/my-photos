@@ -9,8 +9,18 @@ const Upload = () => {
   const handleFileSubmit = (e) => {
     e.preventDefault();
     if (!previewSource) return;
-    alert("file will be uploaded");
-    //uploadImage(previewSource);
+    uploadImage(previewSource);
+  };
+  const uploadImage = async (base64EncodedImage) => {
+    try {
+      await fetch("http://localhost:5000/api/upload", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ data: base64EncodedImage }),
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
   };
   const previewFile = (file) => {
     const reader = new FileReader();
@@ -35,11 +45,7 @@ const Upload = () => {
         </button>
       </form>
       {previewSource && (
-        <img
-          src={previewSource}
-          alt="choosen photo"
-          style={{ height: "300px" }}
-        />
+        <img src={previewSource} alt="choosen" style={{ height: "300px" }} />
       )}
     </>
   );
